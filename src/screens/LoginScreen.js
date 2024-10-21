@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Image } from 'react-native';
 
 // Importing custom logo   
-import meditrack from '../../assets/meditrack-logo.png'
+import meditrack from '../../assets/meditrack-logo1.png'
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -31,7 +31,7 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Login" color={'#044956'} onPress={handleLogin} />
     </View>
   );
 };
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     alignSelf: 'center',
     marginBottom: 20,
   },

@@ -49,7 +49,7 @@ const AddPatientScreen = ({ navigation }) => {
         onChangeText={setDescription}
         multiline
       />
-      <Button title="Add Patient" onPress={handleAddPatient} />
+      <Button title="Add Patient" onPress={handleAddPatient}  color={'#044956'}/>
     </ScrollView>
   );
 };
