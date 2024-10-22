@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image ,Text} from 'react-native';
 
-// Importing custom logo   
 import meditrack from '../../assets/meditrack-logo1.png'
 
 const LoginScreen = ({ navigation }) => {
@@ -27,11 +26,20 @@ const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Password"
-        value={password}
+        value={password}  
         onChangeText={setPassword}
         secureTextEntry
       />
       <Button title="Login" color={'#044956'} onPress={handleLogin} />
+      <Text style={styles.registerText}>
+        Don't have an account? 
+        <Text 
+          style={styles.registerLink} 
+          onPress={() => navigation.navigate('Register')}
+        > 
+          Register
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -54,6 +62,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+  },
+  registerText: {
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  registerLink: {
+    color: 'blue',
+    marginLeft:20,
+    textDecorationLine: 'underline',
   },
 });
 
