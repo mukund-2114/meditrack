@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image, Text, Alert, ScrollView } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image, Text,Alert, ScrollView } from 'react-native';
 import { registerUser } from '../services/api'; // Assume this function exists in your API service
 import meditrack from '../../assets/meditrack-logo1.png'
-import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -24,10 +23,11 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const handleRegister = async () => {
-    const test = await axios.get('https://6bbc-2607-fea8-351e-f100-14f1-f5b9-c8-142e.ngrok-free.app/')
-    console.log(test)
+    // const test = await axios.get('http://10.0.0.30:3000/')
+    // console.log(test.data)
     setErrors({});
     let newErrors = {};
+
 
     if (!username.trim()) newErrors.username = "Username is required";
     if (!email.trim()) newErrors.email = "Email is required";
@@ -95,11 +95,12 @@ const RegisterScreen = ({ navigation }) => {
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
       <Button 
         title={isLoading ? "Registering..." : "Register"} 
+        color={'#044956'}
         onPress={handleRegister}
         disabled={isLoading}
       />
       <Text style={styles.loginText}>
-        Already have an account? 
+        Already have an account?
         <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}> Login</Text>
       </Text>
     </ScrollView>
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     alignSelf: 'center',
     marginBottom: 20,
   },
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   loginText: {
     marginTop: 20,
     textAlign: 'center',
+    fontSize:16
   },
   loginLink: {
     color: 'blue',

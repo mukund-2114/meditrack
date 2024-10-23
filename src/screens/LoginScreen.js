@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Image ,Text} from 'react-native';
-
 import meditrack from '../../assets/meditrack-logo1.png'
 
 const LoginScreen = ({ navigation }) => {
@@ -8,6 +7,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
+    
     navigation.navigate('Dashboard');
   };
 
@@ -32,12 +32,12 @@ const LoginScreen = ({ navigation }) => {
       />
       <Button title="Login" color={'#044956'} onPress={handleLogin} />
       <Text style={styles.registerText}>
-        Don't have an account? 
+        Don't have an account? &nbsp;
         <Text 
           style={styles.registerLink} 
           onPress={() => navigation.navigate('Register')}
         > 
-          Register
+             Register
         </Text>
       </Text>
     </View>
@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
   registerText: {
     marginTop: 20,
     textAlign: 'center',
+    fontSize: 16
   },
   registerLink: {
     color: 'blue',
-    marginLeft:20,
     textDecorationLine: 'underline',
   },
 });
