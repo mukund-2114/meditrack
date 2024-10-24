@@ -1,35 +1,57 @@
-// src/screens/PatientsListScreen.js
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { patients } from '../data/dummyData';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getPatients } from '../services/api';
 
 const PatientsListScreen = ({ navigation }) => {
+  const [patients, setPatients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    // Fetch patients from API
+    fetchData()
+    
+  }, []);
+
+  const fetchData = async ()=>{
+    const fetchedPatients = await getPatients();  // Replace with actual API call
+    setPatients(fetchedPatients);
+  }
+
   const renderPatientItem = ({ item }) => (
-    <TouchableOpacity
+    <TouchableOpacity 
       style={styles.patientItem}
-      onPress={() => navigation.navigate('PatientDetails', { patientId: item.id })}
+      onPress={() => navigation.navigate('PatientFile', { patientId: item.id })}
     >
-      <Image source={{ uri: item.photo }} style={styles.patientPhoto} />
-      <View style={styles.patientInfo}>
-        <Text style={styles.patientName}>{item.name}</Text>
-        <Text style={styles.patientCondition}>{item.condition}</Text>
-        <Text style={styles.patientDescription}>{item.description}</Text>
-      </View>
+      <Text style={styles.patientName}>{item.name}</Text>
+      <Text style={styles.patientCondition}>{item.condition}</Text>
     </TouchableOpacity>
   );
 
+  const filteredPatients = Array.isArray(patients) 
+  ? patients.filter(patient => 
+      patient.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  : [];
+
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search patients..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
       <FlatList
         data={patients}
         renderItem={renderPatientItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id.toString()}
       />
-      <TouchableOpacity
+      <TouchableOpacity 
         style={styles.addButton}
         onPress={() => navigation.navigate('AddPatient')}
       >
-        <Text style={styles.addButtonText}>Add Patient</Text>
+        <Icon name="add" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -38,44 +60,41 @@ const PatientsListScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 20,
+    backgroundColor: '#F5F5F5',
+  },
+  searchBar: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   patientItem: {
-    flexDirection: 'row',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  patientPhoto: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  patientInfo: {
-    flex: 1,
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   patientName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   patientCondition: {
     fontSize: 14,
     color: 'gray',
   },
-  patientDescription: {
-    fontSize: 14,
-  },
   addButton: {
-    backgroundColor: '#044956',
-    padding: 15,
-    borderRadius: 5,
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#007AFF',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
-  },
-  addButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
 });
 

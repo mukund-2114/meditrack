@@ -13,7 +13,7 @@ export const registerUser =  (userData) => {
   console.log(api.post('/api/users/register'))
   api.post('/api/users/register', userData);
 }
-export const getPatients =() => api.get('/api/patients');
+export const getPatients =() =>api.get('/api/patients');
 export const getPatientById = (id) =>  api.get(`/api/patients/${id}`);
 export const addPatient = (patientData) =>  api.post('/api/patients', patientData);
 export const getPatientTests = (patientId) => api.get(`/api/tests/${patientId}/tests`);

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image, Text,Alert, ScrollView } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image, Text, Alert, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { registerUser } from '../services/api'; // Assume this function exists in your API service
-import meditrack from '../../assets/meditrack-logo1.png'
+import meditrack from '../../assets/meditrack-logo1.png';
+import background from '../../assets/bg.png'; // Import your background image
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -17,17 +18,13 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const isValidPassword = (password) => {
-    // Require at least 8 characters, one uppercase, one lowercase, and one number
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
     return passwordRegex.test(password);
   };
 
   const handleRegister = async () => {
-    // const test = await axios.get('http://10.0.0.30:3000/')
-    // console.log(test.data)
     setErrors({});
     let newErrors = {};
-
 
     if (!username.trim()) newErrors.username = "Username is required";
     if (!email.trim()) newErrors.email = "Email is required";
@@ -44,7 +41,7 @@ const RegisterScreen = ({ navigation }) => {
     setIsLoading(true);
     try {
       const userData = { username, email, password, role: 'user' };
-      await registerUser(userData);
+       registerUser(userData);
       Alert.alert('Success', 'Registration successful', [
         { text: 'OK', onPress: () => navigation.navigate('Login') }
       ]);
@@ -56,66 +53,77 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={meditrack} // Make sure to add your logo
-        style={styles.logo}
-      />
-      <Text style={styles.title}>Create Account</Text>
-      <TextInput
-        style={[styles.input, errors.username && styles.inputError]}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
-      <TextInput
-        style={[styles.input, errors.email && styles.inputError]}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-      <TextInput
-        style={[styles.input, errors.password && styles.inputError]}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-      <TextInput
-        style={[styles.input, errors.confirmPassword && styles.inputError]}
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
-      {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
-      <Button 
-        title={isLoading ? "Registering..." : "Register"} 
-        color={'#044956'}
-        onPress={handleRegister}
-        disabled={isLoading}
-      />
-      <Text style={styles.loginText}>
-        Already have an account?
-        <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}> Login</Text>
-      </Text>
-    </ScrollView>
+    <ImageBackground 
+      source={background}  // Set the background image
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image
+          source={meditrack} // Make sure to add your logo
+          style={styles.logo}
+        />
+        <Text style={styles.title}>Create Account</Text>
+        <TextInput
+          style={[styles.input, errors.username && styles.inputError]}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
+        {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+        <TextInput
+          style={[styles.input, errors.email && styles.inputError]}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+        <TextInput
+          style={[styles.input, errors.password && styles.inputError]}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+        <TextInput
+          style={[styles.input, errors.confirmPassword && styles.inputError]}
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
+        {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+        <TouchableOpacity style={styles.btn}>
+            <Button 
+              title={isLoading ? "Registering..." : "Register"} 
+              color={'#044956'}
+              onPress={handleRegister}
+              disabled={isLoading}
+            />
+        </TouchableOpacity>
+        <Text style={styles.loginText}>
+          Already have an account?
+          <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}> Login</Text>
+        </Text>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,  // Ensures the background image covers the entire screen
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
     alignSelf: 'center',
     marginBottom: 20,
   },
@@ -129,8 +137,12 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
+    borderRadius:50,
     marginBottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingVertical:10,
+    fontSize:16,
+    backgroundColor: 'white',  // Adds a white background to input fields
   },
   inputError: {
     borderColor: 'red',
@@ -143,12 +155,22 @@ const styles = StyleSheet.create({
   loginText: {
     marginTop: 20,
     textAlign: 'center',
-    fontSize:16
+    fontSize: 16,
+    fontWeight:'bold'
   },
   loginLink: {
     color: 'blue',
     textDecorationLine: 'underline',
+    fontWeight:'bold'
   },
+  btn:{
+    backgroundColor: '#044956',
+    borderRadius: 50,
+    overflow:'hidden',
+    paddingVertical: 3,
+    marginTop:20,
+    fontSize: 16,
+  }
 });
 
 export default RegisterScreen;
